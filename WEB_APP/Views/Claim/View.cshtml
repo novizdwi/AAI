@@ -1,0 +1,42 @@
+﻿@model WEB_API.Models.ClaimModel
+
+@{
+    ViewData["Title"] = "Claim - View";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>@ViewData["Title"]</h1>
+<button type="button" class="btn btn-secondary" onclick="history.go(-1)">Back</button>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group mt-1">
+            <label asp-for="ClaimId" class="control-label font-weight-bold"><b>Claim Id</b></label> &nbsp; : &nbsp;
+            @Model.ClaimId
+        </div>
+        <div class="form-group mt-1">
+            <label asp-for="PatientName" class="control-label font-weight-bold"><b>Patient Name</b></label> &nbsp; : &nbsp;
+            @Model.PatientName
+        </div>
+        <div class="form-group mt-1">
+            <label asp-for="DateOfService" class="control-label font-weight-bold"><b>Date of Service</b></label>  &nbsp; : &nbsp;
+            @Model.DateOfService
+        </div>
+        <div class="form-group mt-1">
+            <label asp-for="MedicalProvider" class="control-label font-weight-bold"><b>Medical Provider</b></label>  &nbsp; : &nbsp;
+            @Model.MedicalProvider
+        </div>
+        <div class="form-group mt-1">
+            <label asp-for="Diagnosis" class="control-label font-weight-bold"><b>Diagnosis</b></label>  &nbsp; : &nbsp;
+            @Model.Diagnosis
+        </div>
+        <div class="form-group mt-1">
+            <label asp-for="ClaimAmount" class="control-label font-weight-bold"><b>Claim Amount</b></label>   &nbsp; : &nbsp;
+            @string.Format("{0:#,##0.##}", @Model.ClaimAmount)
+        </div>
+        <div class="form-group mt-1">
+            <label asp-for="Status" class="control-label "><b>Status</b></label>  &nbsp; : &nbsp;
+            @Model.Status
+        </div>
+    </div>
+</div>

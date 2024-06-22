@@ -1,0 +1,141 @@
+﻿@model WEB_APP.Models.ClaimViewModel
+
+@{
+    ViewData["Title"] = "Claim - List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int Rownum = 0;
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="row">
+    <div class="col-12">
+        <div class="row">
+            <div class="col-12">
+                Search :
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <form action="Claim" method="POST" role="form" class="form-horizontal">
+                    <input list="Statuss" id="Status" name="Status">
+                    <datalist id="Statuss">
+                        @foreach (var item in Model.Statuses)
+                        {
+                            <option value="@item.Value">@item.Text</option>
+                        }
+                    </datalist>
+                    &nbsp;
+                    <input type="date" name="DateFrom" value="@Model.DateFrom" /> &nbsp;
+                    <input type="date" name="DateTo" value="@Model.DateTo" /> &nbsp;
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <a asp-action="New">Create New</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th style="width:25px;">No</th>
+            <th>Claim Id</th>
+            <th>Patient Name</th>
+            <th>Date Of Service</th>
+            <th>Medical Provider</th>
+            <th>Diagnosis</th>
+            <th>ClaimAmount</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if(Model.list_ != null)
+        @foreach (var item in Model.list_)
+        {
+            <tr>
+                <td>@{
+                        Rownum++;
+                    }@Rownum</td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ClaimId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PatientName)
+                </td>
+                <td>
+                    @{
+                        var formattedDate = item.DateOfService.HasValue ? item.DateOfService.Value.ToString("dd/MM/yyyy") : "";
+                    }
+                    @Html.DisplayFor(modelItem => formattedDate, new { @class = "form-control" })
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MedicalProvider)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Diagnosis)
+                </td>
+                <td>@string.Format("{0:#,##0.##}", item.ClaimAmount)</td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    <button type="button" class="btn btn-primary" onclick="View(@item.ClaimId)">
+                        View
+                    </button>
+                    @Html.Raw("|")
+                    <button type="button" class="btn btn-secondary" onclick="Edit(@item.ClaimId)">
+                        Edit
+                    </button>
+                    @Html.Raw("|")
+                    <button type="button" class="btn btn-danger" onclick="Delete(@item.ClaimId)">
+                        Delete
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+<script>
+    function View(id) {
+        var url = '@Url.Action("View", "Claim", new { Id = "__Id__" })';
+        url = url.replace("__Id__", encodeURIComponent(id));
+        window.location.href = url;
+    }
+
+    function Edit(id) {
+        var url = '@Url.Action("Edit", "Claim", new { Id = "__Id__" })';
+        url = url.replace("__Id__", encodeURIComponent(id));
+        window.location.href = url;
+    }
+
+    function Delete(id) {
+        if (confirm("Are you sure you want to proceed?")) {
+            var url = '@Url.Action("Delete", "Claim")';
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: { ClaimId: id },
+                success: function (data) {
+                    alert("sucessfully deleted");
+                    window.location.href = '@Url.Action("Index", "Claim")';
+                },
+                error: function (xhr, status, error) {
+                    alert(error);
+                }
+            });
+
+        }
+    }
+
+</script>
